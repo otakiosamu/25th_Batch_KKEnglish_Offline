@@ -1,59 +1,159 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# KKEnglish — English Lesson Management System
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+**英会話スクール向けレッスン予約・講師スケジュール・ポイント管理システム**
 
-## About Laravel
+`PHP 8.2+` · `Laravel 12` · `MySQL` · `Blade` · `JavaScript` · `Bootstrap` · `Laravel Reverb`
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+> 本リポジトリは、3名で共同開発した[元のKKEnglishリポジトリ](https://github.com/kredo-school/25th_Batch_KKEnglish_Offline)のForkです。就職活動用に、システム全体の機能と自分の担当したバックエンド領域を整理しています。
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 1. プロジェクト概要
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+KKEnglishは、生徒・講師・管理者の3ロールを持つ英会話スクールの運営支援Webアプリケーションです。予約、勤務シフト、キャンセル、ポイント消費・返還、学習履歴などの関連業務を一元管理することを目指しました。
 
-## Learning Laravel
+| 項目 | 内容 |
+| --- | --- |
+| 開発期間 | 2026年7月〜10月（約3か月） |
+| 開発体制 | 3名のチーム開発 |
+| 個人担当 | 生徒・講師向けバックエンド |
+| バックエンド | PHP 8.2以上 / Laravel 12 |
+| データベース | MySQL |
+| フロントエンド | Blade / HTML / CSS / JavaScript / Bootstrap |
+| その他 | Git / GitHub / Vite / Laravel Reverb / Laravel Echo |
+| テスト | PHPUnit（テストファイルあり、網羅性は検証中） |
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## 2. 主な機能
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+| ロール | 主な機能 |
+| --- | --- |
+| 生徒 | 講師検索、予約・キャンセル、空き枠確認、ポイント履歴、お気に入り、レビュー、学習履歴・進捗 |
+| 講師 | 担当予約の確認、勤務スケジュール、スケジュール例外、レッスン結果登録・履歴 |
+| 管理者 | 生徒・講師・教材管理、シフトパターン・割当、予約・稼働状況の確認、運用ダッシュボード、お知らせ管理 |
 
-## Laravel Sponsors
+これらはリポジトリのController、Service、View等で確認できる機能の概要です。公開デモで動作検証済みという意味ではありません。
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## 3. 自分の担当範囲
 
-### Premium Partners
+3名のチーム制作のうち、私は主に生徒・講師向けのバックエンドを担当しました。
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+- Controller / Service / Model / Migrationの作成・修正
+- レッスン予約・キャンセル関連の業務処理
+- 講師の空き時間計算と予約重複チェック
+- 予約に伴うポイント消費・返還処理
+- 講師のスケジュールと授業結果に関わる処理
+- 他メンバーとのデータ構造・画面との連携確認
 
-## Contributing
+管理者機能やフロントエンドの多くは他メンバーが担当しています。本READMEでは、チーム全体の実装内容と個人の担当箇所を区別して紹介します。
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 4. アーキテクチャ
 
-## Code of Conduct
+LaravelのMVCをベースに、複雑な業務処理をServiceへ分離しています。
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```text
+Browser → Route → Controller → Service → Eloquent Model → Database
+```
 
-## Security Vulnerabilities
+| Service | 主な役割 |
+| --- | --- |
+| `ReservationService` | 予約条件の検証、重複チェック、予約作成、授業結果処理 |
+| `AvailabilityService` | シフトから予約枠を生成し、既存予約・例外時間と照合 |
+| `PointService` | ポイント消費・返還、残高・取引履歴管理 |
+| `BookingPolicyService` | レッスン形式・予約締切などのルール判定 |
+| `CancellationPolicyService` | キャンセルのペナルティ率・ポイント計算 |
+| `TeacherSearchService` | 講師検索処理 |
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## 5. 技術的な工夫
 
-## License
+### 5.1 予約の競合制御とデータ整合性
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+同一講師・時間帯への同時予約を考慮し、`ReservationService`で以下を使用しています。
+
+- `DB::transaction()`で予約登録・ポイント消費を一連のトランザクションとして処理
+- `lockForUpdate()`で生徒・講師スケジュールのレコードをロック
+- 有効な既存予約との時間帯重複を検査
+- 講師と教材の適合、勤務シフト、休止時間、レッスン時間を検証
+
+```php
+$reservation = DB::transaction(function () use ($student, $data) {
+    $student = Student::query()
+        ->whereKey($student->getKey())
+        ->lockForUpdate()
+        ->firstOrFail();
+
+    $schedule = TeacherSchedule::query()
+        ->whereKey($data['schedule_id'])
+        ->lockForUpdate()
+        ->firstOrFail();
+
+    // 予約条件の検証、予約作成、ポイント消費（抜粋）
+});
+```
+
+**目的:** 予約とポイント残高の不整合を防ぎ、同時操作による競合を抑えることです。あらゆる並行アクセスで重複を防げる保証は、DB制約や並行実行テストによる追加検証が必要です。
+
+### 5.2 空き枠生成
+
+`AvailabilityService`では勤務シフトから30分単位の予約枠を生成します。講師の予約、学生自身の他予約、スケジュール例外、過去時刻、予約締切などを考慮します。
+
+### 5.3 ポイント管理
+
+`PointService`では残高不足・二重消費・二重返還を検出し、`PointTransaction`にポイント取引履歴を保存します。予約に関連する残高更新の追跡可能性を意識しました。
+
+### 5.4 ビジネスルールの分離と改善課題
+
+予約とキャンセルのポリシーを別Serviceへ分離しています。一方、予約締切の条件はService間で差があるため、**ルールの一元化・テスト拡充が今後の改善課題**です。全処理で統一されているとは主張しません。
+
+## 6. 主なデータモデル
+
+`User`、`Student`、`Teacher`、`TeacherSchedule`、`Reservation`、`ReservationHistory`、`PointTransaction`、`Material`、`LessonRecord`、`Review`、`ScheduleException`などを使用します。
+
+## 7. ローカルセットアップ（参考）
+
+**必要な環境:** PHP 8.2以上、Composer、Node.js / npm、MySQL
+
+```bash
+git clone https://github.com/otakiosamu/25th_Batch_KKEnglish_Offline.git
+cd 25th_Batch_KKEnglish_Offline
+composer install
+npm install
+cp .env.example .env
+php artisan key:generate
+```
+
+ローカルでデータベースを作成して`.env`の`DB_*`設定を調整します。その後、以下を実行します。
+
+```bash
+php artisan migrate
+# 初期データが必要な場合はSeederの中身を確認してから実行
+php artisan db:seed
+php artisan serve
+```
+
+別のターミナルで`npm run dev`を実行します。通常は`http://127.0.0.1:8000`でアクセスします。リアルタイム機能はReverb等の追加設定が必要です。
+
+**注意:** 上記手順はコード構成を基にした参考例です。このForkのクリーン環境での起動確認はまだ実施していません。Seederのダミーアカウントを本番公開環境でそのまま利用しないでください。
+
+## 8. テストと今後の改善
+
+リポジトリにはPHPUnitのFeature / Unitテストがあります。ただし、主要ロジックのテスト網羅性や実行成功率を検証済みとはしていません。
+
+今後の主な改善予定:
+
+1. 同時予約、予約重複、例外発生時のロールバックのテスト
+2. ポイント不足・二重消費・二重返還のテスト
+3. 予約締切・キャンセル条件の統一と境界値テスト
+4. ロール別アクセス制御のテスト
+5. Laravel Pint・静的解析・CIによる品質向上
+6. スクリーンショット、ER図、短い操作デモの追加
+7. 安全なデモユーザーを用意したWeb公開
+
+## 9. 開発を通じて学んだこと
+
+単純なCRUDだけでなく、予約枠、ポイント、講師の勤務状況といった複数のビジネスルールをデータとコードで表現する重要性を学びました。Serviceによる責務の分離、データ整合性と競合制御、チームメンバーとの仕様調整が特に重要な経験となりました。
+
+## 10. リポジトリ・クレジット
+
+- **Original（チーム制作）:** https://github.com/kredo-school/25th_Batch_KKEnglish_Offline
+- **Portfolio Fork（個人用）:** https://github.com/otakiosamu/25th_Batch_KKEnglish_Offline
+- **GitHub Profile:** https://github.com/otakiosamu
+
+本アプリケーションは3名による共同制作です。元のチームメンバーの貢献は、Fork元のコミット履歴でも確認できます。
