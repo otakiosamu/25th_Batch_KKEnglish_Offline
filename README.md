@@ -184,3 +184,19 @@ php artisan serve
   
 
 本アプリケーションは3名による共同制作です。元のチームメンバーの貢献は、Fork元のコミット履歴でも確認できます。
+
+
+## データベース設計（ERD）
+
+以下は、KKEnglishのデータベース設計を表したERDです。  
+チーム開発時に作成したSprint 7時点の設計資料で、予約、講師スケジュール、ポイント管理、レビューなどの主要機能の関係を表しています。
+
+![KKEnglish ERD](docs/screenshots/kkenglish-erd.png)
+
+### 設計のポイント
+
+- `users` テーブルを基点として、`students`、`teachers`、`admins` をロールごとに管理
+- `reservations` テーブルを中心に、生徒、講師、教材、予約ステータスを関連付け
+- `teacher_schedules` と `schedule_exceptions` により、講師の勤務時間と例外時間を管理
+- `point_transactions` により、予約時のポイント消費・キャンセル時の返還履歴を管理
+- `reservation_histories` により、予約の状態変更履歴を追跡
