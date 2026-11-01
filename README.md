@@ -156,4 +156,31 @@ php artisan serve
 - **Portfolio Fork（個人用）:** https://github.com/otakiosamu/25th_Batch_KKEnglish_Offline
 - **GitHub Profile:** https://github.com/otakiosamu
 
+## アプリケーション画面
+
+### トップページ
+![トップページ](docs/screenshots/0-1%20public.png)
+
+### 生徒ダッシュボード
+![生徒ダッシュボード](docs/screenshots/1-1%20student-dash-boad.png)
+
+### 講師検索・予約
+![講師検索画面](docs/screenshots/1-2%20student-reservation.png)
+
+### 講師詳細・予約可能枠
+![講師予約画面](docs/screenshots/1-4%20student-reservation.dtail.png)
+
+### ポイント履歴
+![ポイント履歴](docs/screenshots/1-3%20point%20history.png)
+
+### 講師スケジュール
+![講師スケジュール](docs/screenshots/2-1%20teacher.png)
+
+### 管理者ダッシュボード
+![管理者画面](docs/screenshots/3-1%20admin.png)
+
+### ログイン
+![ログイン画面](docs/screenshots/0-2%20login.png)
+  
+
 本アプリケーションは3名による共同制作です。元のチームメンバーの貢献は、Fork元のコミット履歴でも確認できます。
