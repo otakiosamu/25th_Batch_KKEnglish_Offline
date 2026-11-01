@@ -61,6 +61,49 @@ Browser → Route → Controller → Service → Eloquent Model → Database
 | `CancellationPolicyService` | キャンセルのペナルティ率・ポイント計算 |
 | `TeacherSearchService` | 講師検索処理 |
 
+
+## 予約処理フローチャート
+
+以下は生徒がレッスンを予約する際の処理フローです。
+
+予約条件の検証、重複確認、ポイント消費を行い、
+データベースの整合性を維持する設計としています。
+
+```mermaid
+flowchart TD
+    A["生徒が予約を確定"] --> B["ReservationController"]
+    B --> C["入力値と生徒権限を確認"]
+    C --> D["ReservationService"]
+    D --> E["DBトランザクション開始"]
+    E --> F["生徒・講師シフトの行ロック取得"]
+    F --> G{"予約条件を満たす？"}
+    G -->|No| X["例外・ロールバック"]
+    G -->|Yes| H{"重複予約なし？"}
+    H -->|No| X
+    H -->|Yes| I["予約レコード作成"]
+    I --> J["PointService.consume"]
+    J --> K{"残高十分・二重消費なし？"}
+    K -->|No| X
+    K -->|Yes| L["ポイント減算・履歴保存"]
+    L --> M["トランザクション確定"]
+    M --> N["ReservationCreatedイベント発行"]
+    N --> O["予約完了"]
+
+    style O fill:#dcfce7,stroke:#16a34a,color:#166534
+    style X fill:#fee2e2,stroke:#dc2626,color:#991b1b
+```
+
+### 設計上のポイント
+
+- **トランザクション処理**：予約登録とポイント消費を一体的に処理
+- **排他制御**：`lockForUpdate()` を使用して同時予約の競合を抑制
+- **重複チェック**：講師と生徒それぞれの予約時間を確認
+- **ポイント管理**：残高不足や二重消費を検出
+- **イベント通知**：予約処理の確定後にイベントを発行
+
+※ 排他制御の完全性については、今後の並行実行テストで検証予定です。
+
+
 ## 5. 技術的な工夫
 
 ### 5.1 予約の競合制御とデータ整合性
@@ -200,3 +243,5 @@ php artisan serve
 - `teacher_schedules` と `schedule_exceptions` により、講師の勤務時間と例外時間を管理
 - `point_transactions` により、予約時のポイント消費・キャンセル時の返還履歴を管理
 - `reservation_histories` により、予約の状態変更履歴を追跡
+
+
